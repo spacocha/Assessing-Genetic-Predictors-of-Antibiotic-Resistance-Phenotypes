@@ -7,7 +7,12 @@ import random
 #xls = pd.ExcelFile("small data set test.xlsx")
 #changed to import excel files directly
 df1 = pd.read_excel('CARD results.xls')
-df2 = pd.read_excel('phenotype data.xls')
+#remove sheet 2 from Gray et al SI table 2
+df2 = pd.read_excel('es0c03803_si_002.xls')
+
+#old phenotype data by class
+#df2 = pd.read_excel('phenotype data.xls')
+
 phenotype_dict = {}
 rows = []
 for index,row in df2.iterrows():
@@ -20,15 +25,13 @@ random.shuffle(rows)
 for index, row in rows:
   isolateId = row['isolateID']
   phenotype_dict[isolateId] = []
-  phenotype_dict[isolateId].append(row['penam'])
-  phenotype_dict[isolateId].append(row['macrolide1'])
-  phenotype_dict[isolateId].append(row['macrolide2'])
-  phenotype_dict[isolateId].append(row['tetracycline'])
-  phenotype_dict[isolateId].append(row['aminoglycoside'])
-  phenotype_dict[isolateId].append(row['fluoroquinolone'])
-  phenotype_dict[isolateId].append(row['sulfonamide'])
-  phenotype_dict[isolateId].append(row['peptide'])
-  phenotype_dict[isolateId].append(row['phenicol'])
+  phenotype_dict[isolateId].append(row['amp_res'])
+  phenotype_dict[isolateId].append(row['cip_res'])
+  phenotype_dict[isolateId].append(row['tet_res'])
+  phenotype_dict[isolateId].append(row['c_res'])
+  phenotype_dict[isolateId].append(row['gm_res'])
+  phenotype_dict[isolateId].append(row['azm_res'])
+  phenotype_dict[isolateId].append(row['cl_res'])
 
 #Is this used?
 resistance_dict = {}
@@ -46,13 +49,13 @@ for index, row in rows:
   data = []
   data.append(row['Percentage Length of Reference Sequence'])
   data.append(row['Best_Identities'])
-  data.append(row['Drug Class'])
+  data.append(row['Antibiotic'])
   CARD_dict[isolateId].append(data)
 
 #Is this used? If so, where?
 import seaborn as sn
 
-targets = ["penam","macrolide","macrolide","tetracycline","aminoglycoside","fluoroquinolone","sulfonamide","peptide","phenicol"]
+targets = ["ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin"]
 df=[[-1 for i in range(101)] for j in range(121)]
 for length in range(0,121,1):
   for identity in range(0,101,1):
