@@ -1,12 +1,29 @@
+import math
+import matplotlib.pyplot as plt
+import seaborn as sn
+import pandas as pd
+import random
+
 # continue from 08_confusion_matrix
 #import functions from functions.py
 #for now, just copy/past
+#I need to figure out how to keep df from the confusion script
 
-import math
+import sys
 
-matrix=calcmcc(df)
+#make sure your 1 path (don't use 0) points to functions folder
+sys.path.append('../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
+
+#import all functions
+from functions import *
+
+sys.path.append('../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/08_confusion_matrix/')
+from confusion_matrix import df
+
+#df comes from confusion script
+matrix=calcmcc(df,math)
 type='MCC'
-mkplot(matrix, type)
+mkplot(matrix, type, pd, plt, sn)
 #Save within the plot for now
 #In the future, I should change this
 #so it saves within the file

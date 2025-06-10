@@ -97,7 +97,7 @@ def mkconfusion(CARD_dict,phenotype_dict,pd):
     df[length][identity] = m1
  return(df)
 
-def calcmcc(df):
+def calcmcc(df,math):
  matrix = [[0 for i in range(101)] for j in range(121)]
  for length in range(0,121,1):
   for identity in range(0,101,1):
@@ -106,16 +106,10 @@ def calcmcc(df):
     tn = m1[1]
     fp = m1[2]
     fn = m1[3]
-    if (tp+fp)==0:
+    if (math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn)))==0:
       matrix[length][identity] = 0
     else:
-      recall = tp/(tp+fn)
-      pre = tp/(tp+fp)
-      mcc = ((tp*tn)-(fp*fn))/math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
-      f1 = tp/(tp+0.5*(fp+fn))
-      spe= tn/(tn+fp)
-      acc = (tn+tp)/(tn+fp+fn+tp)
-      matrix[length][identity] = mcc
+      matrix[length][identity] = ((tp*tn)-(fp*fn))/math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
  return(matrix)
 
 #Fix the functions so it's one place
@@ -130,16 +124,10 @@ def calcacc(df):
     tn = m1[1]
     fp = m1[2]
     fn = m1[3]
-    if (tp+fp)==0:
+    if (tn+fp+fn+tp)==0:
       matrix[length][identity] = 0
     else:
-      recall = tp/(tp+fn)
-      pre = tp/(tp+fp)
-      mcc = ((tp*tn)-(fp*fn))/math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
-      f1 = tp/(tp+0.5*(fp+fn))
-      spe= tn/(tn+fp)   
-      acc = (tn+tp)/(tn+fp+fn+tp)
-      matrix[length][identity] = acc
+      matrix[length][identity] = (tn+tp)/(tn+fp+fn+tp)
  return(matrix)
 
 #Fix the functions so it's one place
@@ -162,9 +150,8 @@ def calcpre(df):
  return(matrix)
 
 
-def mkplot(matrix, type):
+def mkplot(matrix, type, pd, plt, sn):
  matrix = pd.DataFrame.from_dict(matrix)
- import matplotlib.pyplot as plt
  x_label = []
  y_label = []
  for x in range(101):
