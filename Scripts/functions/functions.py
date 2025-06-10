@@ -2,16 +2,12 @@
 #ideally, just import these
 #however, for now just copy/paste
 
-def Add(num1, num2):
- return num1 + num2
-
 def mkrows(dfdef):
  rows = []
  for index,row in dfdef.iterrows():
   if index <=2:
     continue
   rows.append((index,row))
- random.shuffle(rows)
  return(rows)
 
 def mkphenofromrow(rows):
@@ -35,7 +31,6 @@ def mkphenodict(dfdef):
   if index <=2:
     continue
   rows.append((index,row))
- random.shuffle(rows)
  for index, row in rows:
   isolateId = row['isolateID']
   phenotype_dict[isolateId] = []
@@ -49,9 +44,10 @@ def mkphenodict(dfdef):
  return(phenotype_dict)
 
 def mkCARDdict(dfdef):
+ CARD_dict = {}
+ rows = []
  for index,row in dfdef.iterrows():
   rows.append((index,row))
- random.shuffle(rows)
  for index, row in rows:
   isolateId = row['isolateID'].rsplit('_', 1)[0]
   if isolateId not in CARD_dict:
@@ -63,7 +59,7 @@ def mkCARDdict(dfdef):
   CARD_dict[isolateId].append(data)
  return(CARD_dict)
 
-def mkconfusion(CARD_dict,phenotype_dict):
+def mkconfusion(CARD_dict,phenotype_dict,pd):
  targets = ["ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin"]
  df=[[-1 for i in range(101)] for j in range(121)]
  for length in range(0,121,1):

@@ -1,10 +1,10 @@
 #might have to do this eventually
 #Right now, put functions.py where you execute this
 #
-#import sys
+import sys
 
 #make sure your 1 path (don't use 0) points to functions folder
-#sys.path.insert(1, '../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
+sys.path.insert(1, '../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
 
 #import all functions
 from functions import *
@@ -40,5 +40,5 @@ CARD_dict=mkCARDdict(df1)
 #Is this used? If so, where?
 import seaborn as sn
 
-df=mkconfusion(CARD_dict,phenotype_dict)
+df=mkconfusion(CARD_dict,phenotype_dict,pd)
 
