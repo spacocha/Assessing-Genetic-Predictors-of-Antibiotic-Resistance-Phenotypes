@@ -2,7 +2,11 @@
 #ideally, just import these
 #however, for now just copy/paste
 
+def Add(num1, num2):
+ return num1 + num2
+
 def mkrows(dfdef):
+ rows = []
  for index,row in dfdef.iterrows():
   if index <=2:
     continue
@@ -11,6 +15,7 @@ def mkrows(dfdef):
  return(rows)
 
 def mkphenofromrow(rows):
+ phenotype_dict = {}
  for index, row in rows:
   isolateId = row['isolateID']
   phenotype_dict[isolateId] = []

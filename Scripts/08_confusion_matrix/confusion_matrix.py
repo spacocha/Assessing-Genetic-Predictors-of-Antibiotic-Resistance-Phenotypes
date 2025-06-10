@@ -1,3 +1,13 @@
+#might have to do this eventually
+#Right now, put functions.py where you execute this
+#
+#import sys
+
+#make sure your 1 path (don't use 0) points to functions folder
+#sys.path.insert(1, '../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
+
+#import all functions
+from functions import *
 
 import pandas as pd
 import math
@@ -16,7 +26,7 @@ df2 = pd.read_excel('es0c03803_si_002.xls')
 phenotype_dict = {}
 rows = []
 rows=mkrows(df2)
-
+random.shuffle(rows)
 
 phenotype_dict=mkphenofromrow(rows)
 
