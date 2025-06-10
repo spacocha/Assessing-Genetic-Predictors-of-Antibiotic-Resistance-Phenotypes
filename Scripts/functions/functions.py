@@ -164,6 +164,8 @@ def mkplot(matrix, type, pd, plt, sn):
  plt.title(type)
  plt.xlabel('Identity')
  plt.ylabel('Length')
- plt.show()
+ #plt.show()
+ filename="%s.png" % type
+ plt.savefig(filename,format='png')
 
 
