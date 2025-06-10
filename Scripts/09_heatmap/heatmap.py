@@ -24,8 +24,32 @@ from confusion_matrix import df
 matrix=calcmcc(df,math)
 type='MCC'
 mkplot(matrix, type, pd, plt, sn)
-#Save within the plot for now
-#In the future, I should change this
-#so it saves within the file
+plt.close()
+
+#run accuracy
+matrix=calcacc(df)
+type='ACC'
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+matrix=calcpre(df)
+type='PRE'
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type='SPE'
+matrix=calcspe(df)
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type='RECALL'
+matrix=calcrecall(df)
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type='F1'
+matrix=calcf1(df)
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
 
 

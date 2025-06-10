@@ -112,9 +112,6 @@ def calcmcc(df,math):
       matrix[length][identity] = ((tp*tn)-(fp*fn))/math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
  return(matrix)
 
-#Fix the functions so it's one place
-#where everything is calculated
-#but return just one metric
 def calcacc(df):
  matrix = [[0 for i in range(101)] for j in range(121)]
  for length in range(0,121,1):
@@ -145,8 +142,52 @@ def calcpre(df):
     if (tp+fp)==0:
       matrix[length][identity] = 0
     else:
-      pre = tp/(tp+fp)
-      matrix[length][identity] = pre
+      matrix[length][identity] = tp/(tp+fp)
+ return(matrix)
+
+def calcrecall(df):
+ matrix = [[0 for i in range(101)] for j in range(121)]
+ for length in range(0,121,1):
+  for identity in range(0,101,1):
+    m1 = df[length][identity]
+    tp = m1[0]
+    tn = m1[1]
+    fp = m1[2]
+    fn = m1[3]
+    if (tp+fn)==0:
+      matrix[length][identity] = 0
+    else:
+      matrix[length][identity] = tp/(tp+fn)
+ return(matrix)
+
+def calcf1(df):
+ matrix = [[0 for i in range(101)] for j in range(121)]
+ for length in range(0,121,1):
+  for identity in range(0,101,1):
+    m1 = df[length][identity]
+    tp = m1[0]
+    tn = m1[1]
+    fp = m1[2]
+    fn = m1[3]
+    if (tp+0.5*(fp+fn))==0:
+      matrix[length][identity] = 0
+    else:
+      matrix[length][identity] = tp/(tp+0.5*(fp+fn))
+ return(matrix)
+
+def calcspe(df):
+ matrix = [[0 for i in range(101)] for j in range(121)]
+ for length in range(0,121,1):
+  for identity in range(0,101,1):
+    m1 = df[length][identity]
+    tp = m1[0]
+    tn = m1[1]
+    fp = m1[2]
+    fn = m1[3]
+    if (tn+fp)==0:
+      matrix[length][identity] = 0
+    else:
+      matrix[length][identity] = tn/(tn+fp)
  return(matrix)
 
 
