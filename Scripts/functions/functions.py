@@ -209,4 +209,47 @@ def mkplot(matrix, type, pd, plt, sn):
  filename="%s.png" % type
  plt.savefig(filename,format='png')
 
-
+def mkbootstrap(CARD_dict, obsmat, reps, type, pd, random, math):
+ maxrmat= [[0 for i in range(101)] for j in range(121)]
+ for i in range(0,reps):
+  #Create alpha random matrices in the program
+  #Read in real phenotypes
+  #remove sheet 2 from Gray et al SI table 2
+  df2 = pd.read_excel('es0c03803_si_002.xls')
+  #shuffle each of the important antibiotics
+  random.shuffle(df2.amp_res)
+  random.shuffle(df2.cip_res)
+  random.shuffle(df2.tet_res)
+  random.shuffle(df2.c_res)
+  random.shuffle(df2.gm_res)
+  random.shuffle(df2.azm_res)
+  random.shuffle(df2.cl_res)
+  #clear variables
+  phenotype_dict = {}
+  rows = []
+  #remake the phenotype_dict
+  rows=mkrows(df2)
+  random.shuffle(rows)
+  phenotype_dict=mkphenofromrow(rows)
+  #make confusion matrix
+  df=mkconfusion(CARD_dict,phenotype_dict,pd)
+  #calculate one of the metrics from type
+  if type=="MCC":
+   matrix=calcmcc(df, math)
+  elif type=="ACC":
+   matrix=calcacc(df)
+  elif type=="PRE":
+   matrix=calcpre(df)
+  elif type=="SPE":
+   matrix=calcspe(df)
+  elif type=="F1":
+   matrix=calcf1(df)
+  elif type=="RECALL":
+   matrix=calcrecall(df)
+  
+  #max value of random matrices compared to real values
+  for length in range(0,121,1):
+   for identity in range(0,101,1):
+    if matrix[length][identity]>=obsmat[length][identity]:
+     maxrmat[length][identity]=maxrmat[length][identity]+1
+  return(maxrmat)

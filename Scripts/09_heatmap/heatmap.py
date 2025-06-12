@@ -11,13 +11,14 @@ import random
 
 import sys
 
-#make sure your 1 path (don't use 0) points to functions folder
-sys.path.append('../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
+#make sure this points to functions folder
+#This works assuming you are in analysis
+sys.path.append('../Scripts/functions/')
 
 #import all functions
 from functions import *
 
-sys.path.append('../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/08_confusion_matrix/')
+sys.path.append('../Scripts/08_confusion_matrix/')
 from confusion_matrix import df
 
 #df comes from confusion script

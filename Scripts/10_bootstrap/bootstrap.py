@@ -1,10 +1,23 @@
+import itertools, os, os.path, sys, argparse, itertools, shutil
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Bootstrap values for any metric', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('type', help='metric types, either MCC, ACC, SPE, PRE, F1, or RECALL')
+    parser.add_argument('alpha', help='alpha value for significant threshold, either 0.05 or 0.01 is typical')
+    parser.add_argument('reps', help='number of reps used to determine pvalue, either 50 or 100 for 0.05 or 0.01')
+    args = parser.parse_args()
+
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import math
 import random
+import seaborn as sn
 
 import sys
-sys.path.append('../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
+#Make sure this points to the functions folder
+#This works assuming you are in analysis
+sys.path.append('../Scripts/functions/')
 
 #import all functions
 from functions import *
@@ -16,78 +29,52 @@ rows = []
 
 CARD_dict=mkCARDdict(df1)
 
-
-#1 in 10 is 10%
-#1 in 50 is 5%
-#1 in 100 is 1%
-#This doesn't account for multiple
-#hypothesis testing
-maxrmat=[]
-for i in range(0,50):
- #Create 50 random matrices in the program
- #Read in real phenotypes
- #remove sheet 2 from Gray et al SI table 2
- df2 = pd.read_excel('es0c03803_si_002.xls')
- #shuffle each of the important antibiotics
- random.shuffle(df2.amp_res)
- random.shuffle(df2.cip_res)
- random.shuffle(df2.tet_res)
- random.shuffle(df2.c_res)
- random.shuffle(df2.gm_res)
- random.shuffle(df2.azm_res)
- random.shuffle(df2.cl_res)
- #clear variables
- phenotype_dict = {}
- rows = []
- #remake the phenotype_dict
- rows=mkrows(df2)
- random.shuffle(rows)
- phenotype_dict=mkphenofromrow(rows)
- #Is this used?
- import seaborn as sn
- #make confusion matrix
- df=mkconfusion(CARD_dict,phenotype_dict,pd)
- #calculate acc
- matrix=calcpre(df)
- #max value of random matrices compared to real values
- if i==0:
-  #First, so set maxrmat to matrix
-  maxrmat=matrix
- else:
-  for length in range(0,121,1):
-   for identity in range(0,101,1):
-    if matrix[length][identity]>maxrmat[length][identity]:
-     maxrmat[length][identity]=matrix[length][identity]
-
-
-#make the true observations matrix
+#Read in observations
 df2 = pd.read_excel('es0c03803_si_002.xls')
+
 phenotype_dict = {}
 rows = []
 rows=mkrows(df2)
+random.shuffle(rows)
+
 phenotype_dict=mkphenofromrow(rows)
 df=mkconfusion(CARD_dict,phenotype_dict,pd)
 
 #for mcc also pass math
 obsmat=calcpre(df)
 
-import seaborn as sn
+#1 in 10 is 10%
+#1 in 50 is 5%
+#1 in 100 is 1%
+#How many times does the random value
+#exceed the observed value
+#assigned on command line
+alpha=args.alpha
+reps=args.reps
+#type can be only
+#MCC
+#ACC
+#PRE
+#SPE
+#RECALL
+#F1
+type=args.type
 
-result_matrix = [[0 for i in range(101)] for j in range(121)]
+maxrmat=mkbootstrap(CARD_dict, obsmat, reps, type, pd, random, math)
 
-#pvalue 0 if < 0.01
-#i.e. value this high not see by chance
-#pvalue 1 if > 0.01
-#i.e. value this high see by chance 1% of time
+#Figure out whether it's significant or not
+results_mat= [[0 for i in range(101)] for j in range(121)]
 for length in range(0,121,1):
  for identity in range(0,101,1):
-  if maxrmat[length][identity] < obsmat[length][identity]:
-   result_matrix[length][identity] =0
-  else:
-   result_matrix[length][identity] = 1
+  #This will give you all pvalues
+  #results_mat[length][identity]=maxrmat[length][identity]/reps
+  if maxrmat[length][identity]/reps > alpha:
+   results_mat[length][identity]=1
 
-type='PRE_PVAL'
-mkplot(result_matrix, type, pd, plt, sn)
+typetitle="%s_PVAL" % type
+mkplot(results_mat, typetitle, pd, plt, sn)
 plt.close()
 
-#Add the other metrics, or save as separate files
+#Add the other metrics in separate files
+#computationally intensive
+

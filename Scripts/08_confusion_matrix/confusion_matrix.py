@@ -3,8 +3,9 @@
 #
 import sys
 
-#make sure your 1 path (don't use 0) points to functions folder
-sys.path.insert(1, '../Assessing-Genetic-Predictors-of-Antibiotic-Resistance-Phenotypes/Scripts/functions/')
+#make sure this points to functions folder
+#This will work assuming you are working in analysis
+sys.path.append('../Scripts/functions/')
 
 #import all functions
 from functions import *
