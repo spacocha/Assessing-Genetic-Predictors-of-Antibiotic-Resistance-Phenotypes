@@ -251,7 +251,7 @@ def mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math):
   for length in range(0,121,1):
    for identity in range(0,101,1):
     if matrix[length][identity]>=obsmat[length][identity]:
-     maxrmat[length][identity]=maxrmat[length][identity]+1
-  return(maxrmat)
+     maxrmat[length][identity]+=1
+ return(maxrmat)
 
 
