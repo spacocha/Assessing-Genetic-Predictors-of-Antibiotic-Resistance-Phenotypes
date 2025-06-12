@@ -2,7 +2,7 @@ import itertools, os, os.path, sys, argparse, itertools, shutil
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Bootstrap values for any metric', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('metric', help='metric types, either MCC, ACC, SPE, PRE, F1, or RECALL')
+    parser.add_argument('metric', help='metric types, either MCC, ACC, SPE, PRE, F1, or RECALL', choices=['MCC', 'ACC', 'SPE', 'PRE', 'F1', 'RECALL'])
     parser.add_argument('alpha', help='alpha value for significant threshold, either 0.05 or 0.01 is typical',type=float)
     parser.add_argument('reps', help='number of reps used to determine pvalue, either 50 or 100 for 0.05 or 0.01', type=int)
     args = parser.parse_args()
