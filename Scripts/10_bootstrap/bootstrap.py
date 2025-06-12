@@ -2,9 +2,9 @@ import itertools, os, os.path, sys, argparse, itertools, shutil
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Bootstrap values for any metric', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('type', help='metric types, either MCC, ACC, SPE, PRE, F1, or RECALL')
-    parser.add_argument('alpha', help='alpha value for significant threshold, either 0.05 or 0.01 is typical')
-    parser.add_argument('reps', help='number of reps used to determine pvalue, either 50 or 100 for 0.05 or 0.01')
+    parser.add_argument('metric', help='metric types, either MCC, ACC, SPE, PRE, F1, or RECALL')
+    parser.add_argument('alpha', help='alpha value for significant threshold, either 0.05 or 0.01 is typical',type=float)
+    parser.add_argument('reps', help='number of reps used to determine pvalue, either 50 or 100 for 0.05 or 0.01', type=int)
     args = parser.parse_args()
 
 
@@ -58,9 +58,9 @@ reps=args.reps
 #SPE
 #RECALL
 #F1
-type=args.type
+metric=args.metric
 
-maxrmat=mkbootstrap(CARD_dict, obsmat, reps, type, pd, random, math)
+maxrmat=mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math)
 
 #Figure out whether it's significant or not
 results_mat= [[0 for i in range(101)] for j in range(121)]
@@ -71,10 +71,8 @@ for length in range(0,121,1):
   if maxrmat[length][identity]/reps > alpha:
    results_mat[length][identity]=1
 
-typetitle="%s_PVAL" % type
-mkplot(results_mat, typetitle, pd, plt, sn)
+metrictitle="%s_PVAL" % metric
+mkplot(results_mat, metrictitle, pd, plt, sn)
 plt.close()
 
-#Add the other metrics in separate files
-#computationally intensive
 

@@ -191,7 +191,7 @@ def calcspe(df):
  return(matrix)
 
 
-def mkplot(matrix, type, pd, plt, sn):
+def mkplot(matrix, metric, pd, plt, sn):
  matrix = pd.DataFrame.from_dict(matrix)
  x_label = []
  y_label = []
@@ -202,14 +202,14 @@ def mkplot(matrix, type, pd, plt, sn):
  matrix = pd.DataFrame.from_dict(matrix)
  ax = sn.heatmap(matrix, cmap="YlGnBu")
  ax.invert_yaxis()
- plt.title(type)
+ plt.title(metric)
  plt.xlabel('Identity')
  plt.ylabel('Length')
  #plt.show()
- filename="%s.png" % type
+ filename="%s.png" % metric
  plt.savefig(filename,format='png')
 
-def mkbootstrap(CARD_dict, obsmat, reps, type, pd, random, math):
+def mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math):
  maxrmat= [[0 for i in range(101)] for j in range(121)]
  for i in range(0,reps):
   #Create alpha random matrices in the program
@@ -234,17 +234,17 @@ def mkbootstrap(CARD_dict, obsmat, reps, type, pd, random, math):
   #make confusion matrix
   df=mkconfusion(CARD_dict,phenotype_dict,pd)
   #calculate one of the metrics from type
-  if type=="MCC":
+  if metric=="MCC":
    matrix=calcmcc(df, math)
-  elif type=="ACC":
+  elif metric=="ACC":
    matrix=calcacc(df)
-  elif type=="PRE":
+  elif metric=="PRE":
    matrix=calcpre(df)
-  elif type=="SPE":
+  elif metric=="SPE":
    matrix=calcspe(df)
-  elif type=="F1":
+  elif metric=="F1":
    matrix=calcf1(df)
-  elif type=="RECALL":
+  elif metric=="RECALL":
    matrix=calcrecall(df)
   
   #max value of random matrices compared to real values
@@ -253,3 +253,5 @@ def mkbootstrap(CARD_dict, obsmat, reps, type, pd, random, math):
     if matrix[length][identity]>=obsmat[length][identity]:
      maxrmat[length][identity]=maxrmat[length][identity]+1
   return(maxrmat)
+
+
