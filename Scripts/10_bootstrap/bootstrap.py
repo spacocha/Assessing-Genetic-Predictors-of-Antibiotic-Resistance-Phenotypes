@@ -23,7 +23,7 @@ sys.path.append('../Scripts/functions/')
 from functions import *
 
 #Don't change CARD results
-df1 = pd.read_excel('CARD results.xls')
+df1 = pd.read_excel('CARD_results.xls')
 CARD_dict = {}
 rows = []
 
