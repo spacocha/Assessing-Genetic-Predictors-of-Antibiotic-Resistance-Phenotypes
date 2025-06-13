@@ -78,12 +78,19 @@ maxrmat=mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math)
 
 #Figure out whether it's significant or not
 results_mat= [[0 for i in range(101)] for j in range(121)]
+pvalue_mat= [[0 for i in range(101)] for j in range(121)]
 for length in range(0,121,1):
  for identity in range(0,101,1):
   #This will give you all pvalues
   #results_mat[length][identity]=maxrmat[length][identity]/reps
-  if maxrmat[length][identity]/reps > alpha:
+  pvalue_mat[length][identity]=maxrmat[length][identity]/reps
+  if pvalue_mat[length][identity] > alpha:
    results_mat[length][identity]=1
+
+pfilename="%s_pvalue.txt" % metric
+with open(pfilename, 'w') as f:
+ for length in range(0,121,1):
+  f.write(f"{pvalue_mat[length]}\n")  
 
 metrictitle="%s_PVAL" % metric
 mkplot(results_mat, metrictitle, pd, plt, sn)
