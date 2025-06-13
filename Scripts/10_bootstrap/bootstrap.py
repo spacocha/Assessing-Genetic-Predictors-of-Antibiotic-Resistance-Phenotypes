@@ -40,8 +40,6 @@ random.shuffle(rows)
 phenotype_dict=mkphenofromrow(rows)
 df=mkconfusion(CARD_dict,phenotype_dict,pd)
 
-#for mcc also pass math
-obsmat=calcpre(df)
 
 #1 in 10 is 10%
 #1 in 50 is 5%
@@ -59,6 +57,22 @@ reps=args.reps
 #RECALL
 #F1
 metric=args.metric
+
+#for mcc also pass math
+#make the obsmat based on chosen metric
+if metric=="MCC":
+   obsmat=calcmcc(df, math)
+elif metric=="ACC":
+   obsmat=calcacc(df)
+elif metric=="PRE":
+   obsmat=calcpre(df)
+elif metric=="SPE":
+   obsmat=calcspe(df)
+elif metric=="F1":
+   obsmat=calcf1(df)
+elif metric=="RECALL":
+   obsmat=calcrecall(df)
+
 
 maxrmat=mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math)
 
