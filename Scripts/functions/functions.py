@@ -61,8 +61,8 @@ def mkCARDdict(dfdef):
 
 def mkconfusion(CARD_dict,phenotype_dict,pd):
  targets = ["ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin"]
- df=[[-1 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ df=[[-1 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = [0,0,0,0]
     for isolateId in CARD_dict:
@@ -74,7 +74,7 @@ def mkconfusion(CARD_dict,phenotype_dict,pd):
           drugs = drugs + data[2]
       start_index = 0
       for target in targets:
-        if pd.isna(drugs):
+        if drugs=="":
           continue
           # TP
 	  # I this this needs to be done at the isolate level, not the gene level
@@ -83,13 +83,13 @@ def mkconfusion(CARD_dict,phenotype_dict,pd):
         if target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==-1 or phenotype_dict[isolateId][start_index]==0):
           m1[0]+=1
           # TN
-        if not target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==1):
+        elif not target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==1):
           m1[1]+=1
           # FP
-        if target.lower() in drugs.lower() and phenotype_dict[isolateId][start_index]==1:
+        elif target.lower() in drugs.lower() and phenotype_dict[isolateId][start_index]==1:
           m1[2]+=1
           # FN
-        if not target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==-1 or phenotype_dict[isolateId][start_index]==0):
+        elif not target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==-1 or phenotype_dict[isolateId][start_index]==0):
           m1[3]+=1
         start_index+=1
     #print(length,identity,m1[0],m1[1],m1[2],m1[3])
@@ -98,8 +98,8 @@ def mkconfusion(CARD_dict,phenotype_dict,pd):
  return(df)
 
 def calcmcc(df,math):
- matrix = [[0 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ matrix = [[0 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = df[length][identity]
     tp = m1[0]
@@ -113,8 +113,8 @@ def calcmcc(df,math):
  return(matrix)
 
 def calcacc(df):
- matrix = [[0 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ matrix = [[0 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = df[length][identity]
     tp = m1[0]
@@ -131,8 +131,8 @@ def calcacc(df):
 #where everything is calculated
 #but return just one metric
 def calcpre(df):
- matrix = [[0 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ matrix = [[0 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = df[length][identity]
     tp = m1[0]
@@ -146,8 +146,8 @@ def calcpre(df):
  return(matrix)
 
 def calcrecall(df):
- matrix = [[0 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ matrix = [[0 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = df[length][identity]
     tp = m1[0]
@@ -161,8 +161,8 @@ def calcrecall(df):
  return(matrix)
 
 def calcf1(df):
- matrix = [[0 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ matrix = [[0 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = df[length][identity]
     tp = m1[0]
@@ -176,8 +176,8 @@ def calcf1(df):
  return(matrix)
 
 def calcspe(df):
- matrix = [[0 for i in range(101)] for j in range(121)]
- for length in range(0,121,1):
+ matrix = [[0 for i in range(101)] for j in range(101)]
+ for length in range(0,101,1):
   for identity in range(0,101,1):
     m1 = df[length][identity]
     tp = m1[0]
@@ -197,7 +197,7 @@ def mkplot(matrix, metric, pd, plt, sn):
  y_label = []
  for x in range(101):
   x_label.append(x)
- for y in range(121):
+ for y in range(101):
   y_label.append(y)
  matrix = pd.DataFrame.from_dict(matrix)
  ax = sn.heatmap(matrix, cmap="YlGnBu")
@@ -209,21 +209,40 @@ def mkplot(matrix, metric, pd, plt, sn):
  filename="%s.png" % metric
  plt.savefig(filename,format='png')
 
-def mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math):
- maxrmat= [[0 for i in range(101)] for j in range(121)]
+def mkbootstrap(obsmat, reps, metric, pd, random, math):
+ maxrmat= [[0 for i in range(101)] for j in range(101)]
+ from datetime import datetime
  for i in range(0,reps):
+  print(f"Running {i+1} iteration, {datetime.now()}")
   #Create alpha random matrices in the program
   #Read in real phenotypes
   #remove sheet 2 from Gray et al SI table 2
   df2 = pd.read_excel('es0c03803_si_002.xls')
   #shuffle each of the important antibiotics
-  random.shuffle(df2.amp_res)
-  random.shuffle(df2.cip_res)
-  random.shuffle(df2.tet_res)
-  random.shuffle(df2.c_res)
-  random.shuffle(df2.gm_res)
-  random.shuffle(df2.azm_res)
-  random.shuffle(df2.cl_res)
+  # # use df sample to avoid SettingWithCopyWarning
+  df2['amp_res'] = df2['amp_res'].sample(frac=1).reset_index(drop=True)
+  df2['cip_res'] = df2['cip_res'].sample(frac=1).reset_index(drop=True)
+  df2['tet_res'] = df2['tet_res'].sample(frac=1).reset_index(drop=True)
+  df2['c_res'] = df2['c_res'].sample(frac=1).reset_index(drop=True)
+  df2['gm_res'] = df2['gm_res'].sample(frac=1).reset_index(drop=True)
+  df2['azm_res'] = df2['azm_res'].sample(frac=1).reset_index(drop=True)
+  df2['cl_res'] = df2['cl_res'].sample(frac=1).reset_index(drop=True)
+
+  df1 = pd.read_excel('CARD_results.xls')
+  CARD_dict = {}
+  rows = []
+  df1['Percentage Length of Reference Sequence'] = df1['Percentage Length of Reference Sequence'].sample(frac=1).reset_index(drop=True)
+  df1['Best_Identities'] = df1['Best_Identities'].sample(frac=1).reset_index(drop=True)
+  CARD_dict=mkCARDdict(df1)
+
+  # random.shuffle(df2.amp_res)
+  # random.shuffle(df2.cip_res)
+  # random.shuffle(df2.tet_res)
+  # random.shuffle(df2.c_res)
+  # random.shuffle(df2.gm_res)
+  # random.shuffle(df2.azm_res)
+  # random.shuffle(df2.cl_res)
+
   #clear variables
   phenotype_dict = {}
   rows = []
@@ -248,7 +267,7 @@ def mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math):
    matrix=calcrecall(df)
   
   #max value of random matrices compared to real values
-  for length in range(0,121,1):
+  for length in range(0,101,1):
    for identity in range(0,101,1):
     if matrix[length][identity]>=obsmat[length][identity]:
      maxrmat[length][identity]+=1
