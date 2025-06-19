@@ -74,12 +74,12 @@ elif metric=="RECALL":
    obsmat=calcrecall(df)
 
 
-maxrmat=mkbootstrap(CARD_dict, obsmat, reps, metric, pd, random, math)
+maxrmat=mkbootstrap(obsmat, reps, metric, pd, random, math)
 
 #Figure out whether it's significant or not
-results_mat= [[0 for i in range(101)] for j in range(121)]
-pvalue_mat= [[0 for i in range(101)] for j in range(121)]
-for length in range(0,121,1):
+results_mat= [[0 for i in range(101)] for j in range(101)]
+pvalue_mat= [[0 for i in range(101)] for j in range(101)]
+for length in range(0,101,1):
  for identity in range(0,101,1):
   #This will give you all pvalues
   #Pvalue is more accurately rep as (r+1)/(n+1)
@@ -90,7 +90,7 @@ for length in range(0,121,1):
 
 pfilename="%s_pvalue.txt" % metric
 with open(pfilename, 'w') as f:
- for length in range(0,121,1):
+ for length in range(0,101,1):
   f.write(f"{pvalue_mat[length]}\n")  
 
 metrictitle="%s_PVAL" % metric
