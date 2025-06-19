@@ -82,8 +82,9 @@ pvalue_mat= [[0 for i in range(101)] for j in range(121)]
 for length in range(0,121,1):
  for identity in range(0,101,1):
   #This will give you all pvalues
-  #results_mat[length][identity]=maxrmat[length][identity]/reps
-  pvalue_mat[length][identity]=maxrmat[length][identity]/reps
+  #Pvalue is more accurately rep as (r+1)/(n+1)
+  #Am. J. Hum. Genet. 71:439–441, 2002
+  pvalue_mat[length][identity]=(maxrmat[length][identity]+1)/(reps+1)
   if pvalue_mat[length][identity] > alpha:
    results_mat[length][identity]=1
 
