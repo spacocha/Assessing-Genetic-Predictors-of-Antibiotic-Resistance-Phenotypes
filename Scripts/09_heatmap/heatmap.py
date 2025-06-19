@@ -23,34 +23,34 @@ from confusion_matrix import df
 
 #df comes from confusion script
 matrix=calcmcc(df,math)
-type='MCC'
-mkplot(matrix, type, pd, plt, sn)
+metric='MCC'
+mkplot(matrix, metric, pd, plt, sn)
 plt.close()
 
 #run accuracy
 matrix=calcacc(df)
-type='ACC'
-mkplot(matrix, type, pd, plt, sn)
+metric='ACC'
+mkplot(matrix, metric, pd, plt, sn)
 plt.close()
 
 matrix=calcpre(df)
-type='PRE'
-mkplot(matrix, type, pd, plt, sn)
+metric='PRE'
+mkplot(matrix, metric, pd, plt, sn)
 plt.close()
 
-type='SPE'
+metric='SPE'
 matrix=calcspe(df)
-mkplot(matrix, type, pd, plt, sn)
+mkplot(matrix, metric, pd, plt, sn)
 plt.close()
 
-type='RECALL'
+metric='RECALL'
 matrix=calcrecall(df)
-mkplot(matrix, type, pd, plt, sn)
+mkplot(matrix, metric, pd, plt, sn)
 plt.close()
 
-type='F1'
+metric='F1'
 matrix=calcf1(df)
-mkplot(matrix, type, pd, plt, sn)
+mkplot(matrix, metric, pd, plt, sn)
 plt.close()
 
 
