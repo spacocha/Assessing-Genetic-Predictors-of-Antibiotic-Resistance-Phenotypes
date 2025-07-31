@@ -304,12 +304,12 @@ def mkbootstrap(obsmat, reps, metric, pd, random, math):
   recall_matrix=calcrecall(df)
   
   #max value of random matrices compared to real values
-  compareMatrix(mcc_matrix,mcc_maxrmat,obsmat)
-  compareMatrix(f1_matrix,f1_maxrmat,obsmat)
-  compareMatrix(acc_matrix,acc_maxrmat,obsmat)
-  compareMatrix(pre_matrix,pre_maxrmat,obsmat)
-  compareMatrix(spe_matrix,spe_maxrmat,obsmat)
-  compareMatrix(recall_matrix,recall_maxrmat,obsmat)
+  compareMatrix(mcc_matrix,mcc_maxrmat,obsmat["mcc"])
+  compareMatrix(f1_matrix,f1_maxrmat,obsmat["f1"])
+  compareMatrix(acc_matrix,acc_maxrmat,obsmat["acc"])
+  compareMatrix(pre_matrix,pre_maxrmat,obsmat["pre"])
+  compareMatrix(spe_matrix,spe_maxrmat,obsmat["spe"])
+  compareMatrix(recall_matrix,recall_maxrmat,obsmat["recall"])
  return {
   "mcc": mcc_maxrmat,
   "f1": f1_maxrmat,

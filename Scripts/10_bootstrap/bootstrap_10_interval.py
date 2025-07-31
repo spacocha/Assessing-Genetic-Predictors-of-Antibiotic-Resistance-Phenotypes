@@ -57,24 +57,31 @@ reps=args.reps
 #RECALL
 #F1
 metric=args.metric
-
+obsmat_dict = {
+   "mcc": calcmcc(df, math),
+   "acc":calcacc(df),
+   "pre":calcpre(df),
+   "spe":calcspe(df),
+   "f1":calcf1(df),
+   "recall":calcrecall(df)
+}
 #for mcc also pass math
 #make the obsmat based on chosen metric
-if metric=="MCC":
-   obsmat=calcmcc(df, math)
-elif metric=="ACC":
-   obsmat=calcacc(df)
-elif metric=="PRE":
-   obsmat=calcpre(df)
-elif metric=="SPE":
-   obsmat=calcspe(df)
-elif metric=="F1":
-   obsmat=calcf1(df)
-elif metric=="RECALL":
-   obsmat=calcrecall(df)
+# if metric=="MCC":
+#    obsmat=calcmcc(df, math)
+# elif metric=="ACC":
+#    obsmat=calcacc(df)
+# elif metric=="PRE":
+#    obsmat=calcpre(df)
+# elif metric=="SPE":
+#    obsmat=calcspe(df)
+# elif metric=="F1":
+#    obsmat=calcf1(df)
+# elif metric=="RECALL":
+#    obsmat=calcrecall(df)
 
 
-maxrmat_dict=mkbootstrap(obsmat, reps, metric, pd, random, math)
+maxrmat_dict=mkbootstrap(obsmat_dict, reps, metric, pd, random, math)
 # print(maxrmat)
 # import pickle
 # with open('maxrmat_dict.pickle', 'wb') as handle:
