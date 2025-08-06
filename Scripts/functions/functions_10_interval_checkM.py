@@ -43,6 +43,9 @@ def mkphenofromrow(rows):
   phenotype_dict[isolateId].append(row['gm_res'])
   phenotype_dict[isolateId].append(row['azm_res'])
   phenotype_dict[isolateId].append(row['cl_res'])
+  phenotype_dict[isolateId].append(row['er_res'])
+  phenotype_dict[isolateId].append(row['tmp_res'])
+  
  return(phenotype_dict)
 
 #This doesn't always work, not sure why
@@ -62,6 +65,8 @@ def mkphenodict(dfdef):
   phenotype_dict[isolateId].append(row['gm_res'])
   phenotype_dict[isolateId].append(row['azm_res'])
   phenotype_dict[isolateId].append(row['cl_res'])
+  phenotype_dict[isolateId].append(row['er_res'])
+  phenotype_dict[isolateId].append(row['tmp_res'])
  return(phenotype_dict)
 
 def mkCARDdict(dfdef):
@@ -81,7 +86,7 @@ def mkCARDdict(dfdef):
  return(CARD_dict)
 
 def mkconfusion(CARD_dict,phenotype_dict,pd):
- targets = ["ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin"]
+ targets = ["ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin","erythromycin","trimethoprim"]
  df=[[-1 for i in range(11)] for j in range(11)]
  for length in range(0,101,10):
   for identity in range(0,101,10):
