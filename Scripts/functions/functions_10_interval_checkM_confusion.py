@@ -87,30 +87,32 @@ def mkconfusion(CARD_dict,phenotype_dict,pd):
  for length in range(0,101,10):
   for identity in range(0,101,10):
     m1 = [0,0,0,0]
-    for isolateId in CARD_dict:
+    #All of the phenotype_dict isolates should be considered
+    #But if isolate isn't in CARD_dict, drugs=""
+    for isolateId in phenotype_dict:
       drugs = ""
-      if isolateId not in phenotype_dict:
-        continue
-      for data in CARD_dict[isolateId]:
+      if isolateId in CARD_dict:
+       for data in CARD_dict[isolateId]:
+        #If the gene follows the criteria, record it, otherwise it's the same as not being seen
         if data[0] >= length  and data[1] >= identity:
          drugs = drugs + data[2]
       start_index = 0
       for target in targets:
-        if drugs=="":
-          continue
           # TP
-	  # I this this needs to be done at the isolate level, not the gene level
-	  #also, I think this should be -1 (resistant), 0 (neither), and 1 (sensitive).
-	  #Changed from the original script to TP is has gene and is not sensitive
+	  # -1 (resistant), 0 (neither), and 1 (sensitive).
+	  #Here, TP is defined as having the gene and not being sensitive to it (i.e. 1)
         if target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==-1 or phenotype_dict[isolateId][start_index]==0):
           m1[0]+=1
           # TN
+          #TN is defined as being sensitive to the drug and not having the gene
         elif not target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==1):
           m1[1]+=1
           # FP
+          #FP is defined as being sensitive but having gene
         elif target.lower() in drugs.lower() and phenotype_dict[isolateId][start_index]==1:
           m1[2]+=1
           # FN
+          #FN is defined as not having gene, but not being sensitive to it
         elif not target.lower() in drugs.lower() and (phenotype_dict[isolateId][start_index]==-1 or phenotype_dict[isolateId][start_index]==0):
           m1[3]+=1
         start_index+=1
