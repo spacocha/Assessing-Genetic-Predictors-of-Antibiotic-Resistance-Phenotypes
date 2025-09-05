@@ -1,0 +1,6 @@
+,IsolateId,Name,Completeness,Contamination,Completeness_Model_Used,Translation_Table_Used,Coding_Density,Contig_N50,Average_Gene_Length,Genome_Size,GC_Content,Total_Coding_Sequences,Total_Contigs,Max_Contig_Length,Additional_Notes
+30,bc_500_030218_02,contigs,100.0,1.31,Gradient Boost (General Model),11,0.889,3410,235.4506634499397,6573486,0.64,8290,3695,20625,None
+50,tcs_052517_05,contigs,99.92,3.0,Neural Network (Specific Model),11,0.894,5948,261.2363443521301,4948844,0.61,5657,1795,44157,None
+81,tcs_072017_12,contigs,100.0,1.32,Neural Network (Specific Model),11,0.873,14180,301.3861278835733,6683825,0.66,6459,1970,76266,None
+161,tcs_502,contigs,99.98,0.94,Neural Network (Specific Model),11,0.889,7796,263.77322690395187,6788207,0.66,7642,2546,66590,None
+1,tcs_031618_03,contigs,19.67,0.63,Neural Network (Specific Model),11,0.887,432,114.58750687947166,1403200,0.6,3634,3551,3723,None

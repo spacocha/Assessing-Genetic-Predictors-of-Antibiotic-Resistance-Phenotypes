@@ -1,0 +1,6 @@
+isolateID,clus_num,days_elapsed,weeks_elapsed,date,media,genus,family,tmp_res,cc_res,amp_res,cip_res,tet_res,c_res,gm_res,amx_res,nitro_res,azm_res,ctx_res,cl_res,er_res,moyr
+bc_500_030218_02,5,400,57.14285714,3/2/18,bc,Pseudomonas,Pseudomonadaceae,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,March_2018
+tcs_052517_05,18,119,17,5/25/17,tcs,Pseudomonas,Pseudomonadaceae,-1,-1,-1,1,-1,-1,1,1,-1,-1,0,1,-1,May_2017
+tcs_072017_12,23,175,25,7/20/17,tcs,Pseudomonas,Pseudomonadaceae,-1,-1,-1,1,-1,1,1,-1,-1,0,1,-1,-1,July_2017
+tcs_502,NA,-180,-25.71428571,10/16/16,tcs,Pseudomonas,Pseudomonadaceae,1,-1,0,,1,1,1,1,-1,0,,,0,October_2016
+tcs_031618_03,10,414,59.14285714,3/16/18,tcs,Pseudomonas,Pseudomonadaceae,-1,-1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,March_2018
