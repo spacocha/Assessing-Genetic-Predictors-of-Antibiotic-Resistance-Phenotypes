@@ -17,11 +17,12 @@ import random
 #not sure what this small test is
 #xls = pd.ExcelFile("small data set test.xlsx")
 #changed to import excel files directly
-df1 = pd.read_excel('CARD_results.xls')
+df1 = pd.read_csv('CARD_results.csv')
+df1 = df1.fillna('')
 #remove sheet 2 from Gray et al SI table 2
-df2 = pd.read_excel('es0c03803_si_002.xls')
+df2 = pd.read_csv('es0c03803_si_002.csv')
 
-df3 = pd.read_excel('CheckM Results.xlsx')
+df3 = pd.read_csv('checkm2_results.csv')
 checkM_dict = mkCheckM(df3)
 checkM_block_list = filterCheckM(checkM_dict)
 

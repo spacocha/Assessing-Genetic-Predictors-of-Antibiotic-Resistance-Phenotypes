@@ -5,17 +5,13 @@
 def mkrows(dfdef):
  rows = []
  for index,row in dfdef.iterrows():
-  if index <=2:
-    continue
   rows.append((index,row))
  return(rows)
 
 def mkCheckM(df):
   checkM_dict = {}
   for index,row in df.iterrows():
-    if index <=1:
-      continue
-    binId = row["bin id"]
+    binId = row["IsolateId"]
     completeness = row["Completeness"]
     contamination = row["Contamination"]
     checkM_dict[binId] = [completeness,contamination]
@@ -28,7 +24,7 @@ def filterCheckM(checkM_dict):
   for key in checkM_dict:
     values = checkM_dict[key]
     if values[0] <= completenessTH or values[1] >= contaminationTH:
-      block_list.append(key.rsplit('_', 1)[0])
+      block_list.append(key)
   return block_list
 
 def mkphenofromrow(rows):
@@ -36,6 +32,7 @@ def mkphenofromrow(rows):
  for index, row in rows:
   isolateId = row['isolateID']
   phenotype_dict[isolateId] = []
+  phenotype_dict[isolateId].append(row['tmp_res'])
   phenotype_dict[isolateId].append(row['amp_res'])
   phenotype_dict[isolateId].append(row['cip_res'])
   phenotype_dict[isolateId].append(row['tet_res'])
@@ -44,7 +41,6 @@ def mkphenofromrow(rows):
   phenotype_dict[isolateId].append(row['azm_res'])
   phenotype_dict[isolateId].append(row['cl_res'])
   phenotype_dict[isolateId].append(row['er_res'])
-  phenotype_dict[isolateId].append(row['tmp_res'])
   
  return(phenotype_dict)
 
@@ -52,12 +48,11 @@ def mkphenofromrow(rows):
 #Use mkrows and mkphenofromrow instead
 def mkphenodict(dfdef):
  for index,row in dfdef.iterrows():
-  if index <=2:
-    continue
   rows.append((index,row))
  for index, row in rows:
   isolateId = row['isolateID']
   phenotype_dict[isolateId] = []
+  phenotype_dict[isolateId].append(row['tmp_res'])
   phenotype_dict[isolateId].append(row['amp_res'])
   phenotype_dict[isolateId].append(row['cip_res'])
   phenotype_dict[isolateId].append(row['tet_res'])
@@ -66,7 +61,7 @@ def mkphenodict(dfdef):
   phenotype_dict[isolateId].append(row['azm_res'])
   phenotype_dict[isolateId].append(row['cl_res'])
   phenotype_dict[isolateId].append(row['er_res'])
-  phenotype_dict[isolateId].append(row['tmp_res'])
+
  return(phenotype_dict)
 
 def mkCARDdict(dfdef):
@@ -75,18 +70,19 @@ def mkCARDdict(dfdef):
  for index,row in dfdef.iterrows():
   rows.append((index,row))
  for index, row in rows:
-  isolateId = row['isolateID'].rsplit('_', 1)[0]
-  if isolateId not in CARD_dict:
+  isolateId = row['isolateID']
+  if isolateId not in CARD_dict and row['Antibiotic']:
     CARD_dict[isolateId] = []
   data = []
-  data.append(row['Percentage Length of Reference Sequence'])
-  data.append(row['Best_Identities'])
-  data.append(row['Antibiotic'])
-  CARD_dict[isolateId].append(data)
+  if row['Antibiotic']:
+   data.append(row['Percentage Length of Reference Sequence'])
+   data.append(row['Best_Identities'])
+   data.append(row['Antibiotic'])
+   CARD_dict[isolateId].append(data)
  return(CARD_dict)
 
 def mkconfusion(CARD_dict,phenotype_dict,pd):
- targets = ["ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin","erythromycin","trimethoprim"]
+ targets = ["trimethoprim","ampicillin","ciprofloxacin","tetracycline","chloramphenicol","gentamicin","azithromycin","colistin","erythromycin"]
  df=[[-1 for i in range(11)] for j in range(11)]
  for length in range(0,101,10):
   for identity in range(0,101,10):
@@ -97,7 +93,7 @@ def mkconfusion(CARD_dict,phenotype_dict,pd):
         continue
       for data in CARD_dict[isolateId]:
         if data[0] >= length  and data[1] >= identity:
-          drugs = drugs + data[2]
+         drugs = drugs + data[2]
       start_index = 0
       for target in targets:
         if drugs=="":
@@ -270,7 +266,7 @@ def mkplotRedGreen(matrix, metric, pd, plt, sn,current_time):
     plt.savefig(filename, format='png')
     plt.close()
 
-def mkbootstrap(obsmat, reps, metric, pd, random, math):
+def mkbootstrap(obsmat, reps, df1, df2, df3, pd, random, math):
  mcc_maxrmat= [[0 for i in range(11)] for j in range(11)]
  acc_maxrmat= [[0 for i in range(11)] for j in range(11)]
  f1_maxrmat= [[0 for i in range(11)] for j in range(11)]
@@ -285,7 +281,6 @@ def mkbootstrap(obsmat, reps, metric, pd, random, math):
   #Create alpha random matrices in the program
   #Read in real phenotypes
   #remove sheet 2 from Gray et al SI table 2
-  df2 = pd.read_excel('es0c03803_si_002.xls')
   #shuffle each of the important antibiotics
   # # use df sample to avoid SettingWithCopyWarning
   # df2['amp_res'] = df2['amp_res'].sample(frac=1).reset_index(drop=True)
@@ -296,13 +291,16 @@ def mkbootstrap(obsmat, reps, metric, pd, random, math):
   # df2['azm_res'] = df2['azm_res'].sample(frac=1).reset_index(drop=True)
   # df2['cl_res'] = df2['cl_res'].sample(frac=1).reset_index(drop=True)
 
-  df1 = pd.read_excel('CARD_results.xls')
-  CARD_dict = {}
-  rows = []
+  #randomize card dataset
   df1['Antibiotic'] = df1['Antibiotic'].sample(frac=1).reset_index(drop=True)
   # df1['Percentage Length of Reference Sequence'] = df1['Percentage Length of Reference Sequence'].sample(frac=1).reset_index(drop=True)
   # df1['Best_Identities'] = df1['Best_Identities'].sample(frac=1).reset_index(drop=True)
-  CARD_dict=mkCARDdict(df1)
+  for key in checkM_block_list:
+    if key in CARD_dict:
+        CARD_dict.pop(key)
+  CARD_dict = {}
+  rows = []
+  rand_CARD_dict=mkCARDdict(df1)
 
   # random.shuffle(df2.amp_res)
   # random.shuffle(df2.cip_res)
@@ -313,14 +311,13 @@ def mkbootstrap(obsmat, reps, metric, pd, random, math):
   # random.shuffle(df2.cl_res)
 
   #clear variables
-  phenotype_dict = {}
-  rows = []
-  #remake the phenotype_dict
-  rows=mkrows(df2)
-  random.shuffle(rows)
-  phenotype_dict=mkphenofromrow(rows)
-  #make confusion matrix
-  df=mkconfusion(CARD_dict,phenotype_dict,pd)
+  
+  #make confusion matrix with rand_CARD_dict
+  for key in checkM_block_list:
+    if key in CARD_dict:
+        CARD_dict.pop(key)
+  #Remove
+  df=mkconfusion(rand_CARD_dict,phenotype_dict,pd)
   #calculate one of the metrics from type
   mcc_matrix=calcmcc(df, math)
   acc_matrix=calcacc(df)

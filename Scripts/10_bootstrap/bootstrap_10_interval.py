@@ -20,17 +20,20 @@ import sys
 sys.path.append('../Scripts/functions/')
 
 #import all functions
-from functions_10_interval import *
+from functions_10_interval_checkM import *
 
 #Don't change CARD results
-df1 = pd.read_excel('CARD_results.xls')
+sys.path.append('../Scripts/08_confusion_matrix/')
+from confusion_matrix_10_interval_checkM import *
+
+df1 = pd.read_csv('CARD_results.csv')
 CARD_dict = {}
 rows = []
 
 CARD_dict=mkCARDdict(df1)
 
 #Read in observations
-df2 = pd.read_excel('es0c03803_si_002.xls')
+df2 = pd.read_csv('es0c03803_si_002.csv')
 
 phenotype_dict = {}
 rows = []

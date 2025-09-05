@@ -21,8 +21,67 @@ from functions_10_interval_checkM import *
 sys.path.append('../Scripts/08_confusion_matrix/')
 from confusion_matrix_10_interval_checkM import df
 
+type="PRE_after_checkM"
+with open('%s_df_output.txt' %type, '+w') as f:
+ for items in df:
+  f.write('%s\n' %items)
+
 
 matrix=calcpre(df)
-type='PRE after checkM'
+
+with open('%s_matrix_output.txt' %type, '+w') as f:
+ for items in matrix:
+  f.write('%s\n' %items)
+
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type="mcc_after_checkM"
+matrix=calcmcc(df,math)
+
+with open('%s_matrix_output.txt' %type, '+w') as f:
+ for items in matrix:
+  f.write('%s\n' %items)
+
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type="acc_after_checkM"
+matrix=calcacc(df)
+
+with open('%s_matrix_output.txt' %type, '+w') as f:
+ for items in matrix:
+  f.write('%s\n' %items)
+
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type="RECALL_after_checkM"
+matrix=calcrecall(df)
+
+with open('%s_matrix_output.txt' %type, '+w') as f:
+ for items in matrix:
+  f.write('%s\n' %items)
+
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type="SPE_after_checkM"
+matrix=calcspe(df)
+
+with open('%s_matrix_output.txt' %type, '+w') as f:
+ for items in matrix:
+  f.write('%s\n' %items)
+
+mkplot(matrix, type, pd, plt, sn)
+plt.close()
+
+type="F1_after_checkM"
+matrix=calcf1(df)
+
+with open('%s_matrix_output.txt' %type, '+w') as f:
+ for items in matrix:
+  f.write('%s\n' %items)
+
 mkplot(matrix, type, pd, plt, sn)
 plt.close()
