@@ -23,8 +23,12 @@ def filterCheckM(checkM_dict):
   block_list = []
   for key in checkM_dict:
     values = checkM_dict[key]
-    if values[0] <= completenessTH or values[1] >= contaminationTH:
+    if values[0] < completenessTH or values[1] > contaminationTH:
       block_list.append(key)
+  #add three missing genomes by hand
+  block_list.append('tcs_080317_11')
+  block_list.append('tcs_082417_01')
+  block_list.append('tcs_110917_05')
   return block_list
 
 def mkphenofromrow(rows):
